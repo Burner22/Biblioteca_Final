@@ -1,6 +1,7 @@
 
 package modelo;
 
+import entidades.Autor;
 import entidades.Libro;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -74,7 +75,35 @@ public class LibroData {
         
         
     }   //FUNCIONA
-    
-    
-    
+     
+    public Libro buscarLibro(String nombre_libro){
+        Libro libro = new Libro();
+        String query="SELECT * FROM libro,autor WHERE libro.id_autor=autor.id_autor AND nombre_libro LIKE ?";
+        
+        try{
+            PreparedStatement ps=con.prepareStatement(query);
+            
+            ps.setString(1, nombre_libro+"%");
+            
+            ResultSet rs=ps.executeQuery();
+            
+            while(rs.next()){
+                libro.setId_libro(rs.getInt("id_libro"));
+                libro.setAño(rs.getInt("año"));
+                libro.setISBN(rs.getInt("ISBN"));
+                libro.setEditorial(rs.getString("editorial"));
+                libro.setNombre(rs.getString("nombre"));
+                libro.setTipo(rs.getString("tipo"));
+                Autor autor=new Autor();
+                autor.setId_autor(rs.getInt("id_lector"));
+                
+             
+            }
+            ps.close();
+        }catch(SQLException ex){
+           JOptionPane.showMessageDialog(null, "No se encontro su libro");
+        }
+        
+        return libro;
+    }
 }

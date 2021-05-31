@@ -79,5 +79,10 @@ public class Autor {
     public void setFecha_nac(LocalDate fecha_nac) {
         this.fecha_nac = fecha_nac;
     }
+
+    @Override
+    public String toString() {
+        return apellidoAutor+", "+nombreAutor +"\n ";
+    }
   
 }

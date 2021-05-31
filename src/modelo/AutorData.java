@@ -2,12 +2,16 @@
 package modelo;
 
 import entidades.Autor;
+import entidades.Lector;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -49,7 +53,7 @@ public class AutorData {
         }    
     }  //FUNCIONA
     
-    public void modificarLector(Autor autor){
+    public void modificarAutor(Autor autor){
         String sql = "UPDATE autor SET nombre_autor=?,apellido_autor=?,dni_autor=?,fech_nac=?,nacionalidad=? WHERE id_autor=?";
         
         try {
@@ -72,6 +76,55 @@ public class AutorData {
         } 
     }  //FUNCIONA
     
+    public Autor buscarLector(String nombre,String apellido){
+        String query="SELECT * FROM autor WHERE apellido_autor LIKE ? AND nombre_autor LIKE ?";
+        Autor autor=new Autor();
+        try{
+            PreparedStatement ps=con.prepareStatement(query);
+          
+            ps.setString(1,apellido);
+            ps.setString(2,nombre);
+            
+            ResultSet rs=ps.executeQuery();
+            
+            while(rs.next()){
+                autor.setId_autor(rs.getInt(1));
+                autor.setNombreAutor(rs.getString(2));
+                autor.setApellidoAutor(rs.getString(3));
+                autor.setDni(rs.getInt(4));
+                autor.setFecha_nac(LocalDate.parse(rs.getString(5)));
+                autor.setNacionalidad(rs.getString(6));
+
+            }
+            
+            ps.close();
+            
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "error al buscar el autor");
+        }
+        return autor;
+    }//funciono solo usando los numero en los get del resulset
     
-    
+    public List<Autor> getAll(){
+        List<Autor> l_autores=new ArrayList();
+        String query="SELECT * FROM autor";
+        try{
+            PreparedStatement ps=con.prepareStatement(query);
+            ResultSet rs=ps.executeQuery();
+            
+            while(rs.next()){
+                Autor autor=new Autor();
+                autor.setId_autor(rs.getInt(1));
+                autor.setNombreAutor(rs.getString(2));
+                autor.setApellidoAutor(rs.getString(3));
+                autor.setDni(rs.getInt(4));
+                autor.setFecha_nac(LocalDate.parse(rs.getString(5)));
+                autor.setNacionalidad(rs.getString(6));
+                l_autores.add(autor);
+            }
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null,"No se consiguio la lista de Autores");
+        }
+        return l_autores;
+    }//retorna todos los autores dentro de la tabla autor, funciona 
 }

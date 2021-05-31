@@ -4,6 +4,7 @@ package entidades;
 public class Lector {
    int id_lector, dniLector;
    String nombreLector, apellidoLector, direLector;
+   boolean estado_lector;
 
     public Lector() {
     }
@@ -67,6 +68,14 @@ public class Lector {
         this.direLector = direLector;
     } 
 
+    public boolean isEstado_lector() {
+        return estado_lector;
+    }
+
+    public void setEstado_lector(boolean estado_lector) {
+        this.estado_lector = estado_lector;
+    }
+    
     @Override
     public String toString() {
         return "Lector: "+ id_lector + "\n dniLector=" + dniLector + "\n nombreLector=" + nombreLector + "\n apellidoLector=" + apellidoLector + "\n direLector=" + direLector;

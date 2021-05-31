@@ -4,6 +4,7 @@ package modelo;
 import entidades.Lector;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
@@ -58,4 +59,46 @@ public class LectorData {
         } 
     }   //FUNCIONA
     
+    public Lector buscarLector(int id_lector){
+        String query="SELECT * FROM lector WHERE id_lector=?";
+        Lector lector=new Lector();
+        try{
+            PreparedStatement ps=con.prepareStatement(query);
+            
+            ps.setInt(1,id_lector);
+            
+            ResultSet rs=ps.executeQuery();
+            
+            while(rs.next()){
+                lector.setId_lector(rs.getInt("id_lector"));
+                lector.setNombreLector(rs.getString("nombre_lector"));
+                lector.setApellidoLector(rs.getString("apellido_lector"));
+                lector.setDniLector(rs.getInt("dni_lector"));
+                lector.setDireLector(rs.getString("dire_lector"));
+                lector.setEstado_lector(rs.getBoolean("estado_lector"));
+            }
+            
+            ps.close();
+            
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "error al buscar lector");
+        }
+        return lector;
+    }//funciona
+    
+    public void cambiarEstadoLector(int id_lector, boolean estado){
+        String query="UPDATE lector SET estado_lector=? WHERE id_lector=?";
+        try{
+            PreparedStatement ps=con.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            ps.setBoolean(1, estado);
+            ps.setInt(2, id_lector);
+            
+            ps.executeUpdate();
+            ps.close();
+            
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "error al buscar lector");
+        }
+        
+    }//funciona 
 }
