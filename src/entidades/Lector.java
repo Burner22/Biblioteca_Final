@@ -2,10 +2,10 @@
 package entidades;
 
 public class Lector {
-   int id_lector, dniLector;
-   String nombreLector, apellidoLector, direLector;
-   boolean estado_lector;
-
+    private int id_lector, dniLector;
+    private String nombreLector, apellidoLector, direLector;
+    private boolean estado_lector;
+  
     public Lector() {
     }
 

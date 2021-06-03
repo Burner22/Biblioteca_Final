@@ -98,7 +98,7 @@ public class EjemplarData {
               aux = rs.getString(1);  
               if (aux.equalsIgnoreCase("Disponible") || aux == null){
                 est = true;
-                }
+              }
             }
                
         } catch (SQLException ex) {

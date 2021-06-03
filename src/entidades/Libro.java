@@ -2,9 +2,9 @@
 package entidades;
 
 public class Libro {
-    int id_libro,ISBN,año;
-    Autor autor;
-    String nombre,editorial,tipo;
+    private int id_libro,ISBN,año;
+    private Autor autor;
+    private String nombre,editorial,tipo;
 
     public Libro() {
     }

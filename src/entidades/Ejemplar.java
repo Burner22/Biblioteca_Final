@@ -4,9 +4,9 @@ package entidades;
 import java.util.Objects;
 
 public class Ejemplar {
-    int id_ejemplar;
-    Libro libro;
-    String estado;
+    private int id_ejemplar;
+    private Libro libro;
+    private String estado;
 
     public Ejemplar() {
     }

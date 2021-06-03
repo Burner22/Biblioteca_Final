@@ -5,9 +5,9 @@ import java.time.LocalDate;
 
 
 public class Multa {
-   int id_multa;
-   Prestamo prestamo;
-   LocalDate fecha_fin, fecha_inicio;
+    private int id_multa;
+    private Prestamo prestamo;
+    private LocalDate fecha_fin, fecha_inicio;
 
     public Multa() {
     }

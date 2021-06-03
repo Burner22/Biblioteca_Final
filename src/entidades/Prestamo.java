@@ -6,11 +6,11 @@ import java.time.Month;
 import java.time.temporal.ChronoUnit;
 
 public class Prestamo {
-    int idPrestamo;
-    Lector lector;
-    Ejemplar ejemplar;
-    boolean estado;
-    LocalDate fecha_prestamo;
+    private int idPrestamo;
+    private Lector lector;
+    private Ejemplar ejemplar;
+    private boolean estado;
+    private LocalDate fecha_prestamo;
 
     public Prestamo() {
     }

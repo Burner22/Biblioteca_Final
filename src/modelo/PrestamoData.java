@@ -89,8 +89,7 @@ public class PrestamoData {
             ps.setInt(2, prestamo.getIdPrestamo());
             
             ps.executeUpdate();
-           
-            
+  
             JOptionPane.showMessageDialog(null, "Se ha modificado su prestamo!");
     
             Conexion con = new Conexion(); 

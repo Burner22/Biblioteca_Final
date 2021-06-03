@@ -4,9 +4,9 @@ package entidades;
 import java.time.LocalDate;
 
 public class Autor {
-    int id_autor, dniAutor;
-    String nombreAutor,apellidoAutor,nacionalidad;
-    LocalDate fecha_nac;
+    private int id_autor, dniAutor;
+    private String nombreAutor,apellidoAutor,nacionalidad;
+    private LocalDate fecha_nac;
 
     public Autor() {
     }
