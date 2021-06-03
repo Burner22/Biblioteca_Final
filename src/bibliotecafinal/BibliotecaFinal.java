@@ -52,7 +52,7 @@ public class BibliotecaFinal {
         //led.agregarLector(lector);
         //Lector lector = new Lector (41710461,"Fiero","San","Modulo 12",true);
         //led.actualizarLector(lector);        
-        
+        led.chequeoEstadoLector();
         Prestamo prestamo = new Prestamo (18,lector,ejemplar,false,LocalDate.of(2021, Month.APRIL,21));
         //pre.registrarPrestamo(prestamo);
         //Prestamo prestamo = new Prestamo (lector,ejemplar,true,LocalDate.of(2021, Month.APRIL,21));

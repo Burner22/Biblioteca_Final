@@ -2,12 +2,19 @@
 package modelo;
 
 import entidades.Lector;
+import entidades.Prestamo;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -91,7 +98,7 @@ public class LectorData {
     public void cambiarEstadoLector(int id_lector, boolean estado){
         String query="UPDATE lector SET estado_lector=? WHERE id_lector=?";
         try{
-            PreparedStatement ps=con.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps=con.prepareStatement(query);
             ps.setBoolean(1, estado);
             ps.setInt(2, id_lector);
             
@@ -103,4 +110,35 @@ public class LectorData {
         }
         
     }//funciona 
+    
+    //Si contiene una multa con mas de 90 dias de retraso, se cambia el estado del lector a inactivo
+    public void chequeoEstadoLector(){
+       String sql = "SELECT multa.id_prestamo,fecha_inicio FROM multa,prestamos WHERE multa.id_prestamo = prestamos.id_prestamo";
+       TreeMap <Integer,LocalDate> aux = new TreeMap <> ();
+       Set <Integer> aux2 = aux.keySet();
+       try {
+            PreparedStatement ps = con.prepareStatement(sql);
+       
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()){
+                aux.put(rs.getInt(1),rs.getDate(2).toLocalDate());
+            }
+            long esp;    
+            for (Integer it: aux2){
+                esp = ChronoUnit.DAYS.between(aux.get(it), LocalDate.now());
+                System.out.println(esp);
+                if(esp > 90){
+                    Conexion con = new Conexion();
+                    PrestamoData pre = new PrestamoData(con);
+                    Prestamo preAux = pre.buscarPrestamo(it);
+                    cambiarEstadoLector(preAux.getLector().getId_lector(),false);
+                }   
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(MultaData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }
