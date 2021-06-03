@@ -139,10 +139,10 @@ public class PrestamoData {
     }  
     
     //Chequea que las multas esten saldadas
-    public boolean prestamoXFecha (int id_prestamo){   
+    public boolean prestamoXFecha (int id_lector){   
         Conexion con = new Conexion ();
         MultaData mul = new MultaData (con);
-        return mul.prestamoXFecha(id_prestamo);        
+        return mul.prestamoXFecha(id_lector);        
     }   
     
     //Chequea que no tenga mas de 3 libros

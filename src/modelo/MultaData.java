@@ -64,19 +64,23 @@ public class MultaData {
                 aux.add(rs.getDate(1));
             }
                 
-            for (int f = 0; f<aux.size();f++){
-            
-            if (aux.get(f).toLocalDate().isAfter(LocalDate.now())){
-                multaSaldada = false;
-            }    
-            
+            for (int f = 0; f<aux.size();f++){            
+                if (aux.get(f).toLocalDate().isAfter(LocalDate.now())){
+                    multaSaldada = false;
+                }    
+            }
+
+            if (multaSaldada){  //Si definitivamente no tiene multas atrasadas, actualiza el estado de lector a disponible
+                Conexion con = new Conexion();
+                LectorData lec = new LectorData (con);
+                lec.cambiarEstadoLector(id_lector, true);
             }
             
         } catch (SQLException ex) {
             Logger.getLogger(MultaData.class.getName()).log(Level.SEVERE, null, ex);
         }
        return multaSaldada;
-   }  //Chequea las multas saldadas para poder agregar un prestamo
+   }  //Chequea las multas saldadas para poder agregar un prestamo, actualiza el estado del lector sin multas mayores a 90 dias
    
    public void anularMulta (Multa multa){
        String sql = "UPDATE multa SET fecha_fin=? id_prestamo=? WHERE multa.id_multa=?";   
