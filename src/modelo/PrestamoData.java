@@ -10,8 +10,10 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,15 +30,14 @@ public class PrestamoData {
     public PrestamoData (Conexion c){
         con = c.getConnection();
     }
-    
+    //Chequea que no tenga mas de 3 libros, chequea las multas saldadas, chequea que el lector este activo, chequea que el ejemplar este disponible
     public void registrarPrestamo (Prestamo prestamo){
-        boolean mult = buscarMulta(prestamo.getLector().getId_lector());
+        boolean porFecha = prestamoXFecha(prestamo.getLector().getId_lector());
         boolean prest = prestados(prestamo.getLector().getId_lector());
         boolean dispo = ejemDisponible(prestamo.getEjemplar().getId_ejemplar());      
-        boolean saldado = prestamoXFecha(prestamo.getLector().getId_lector());
-        
+        boolean taActivo = lectorActivo(prestamo.getLector().getId_lector());
         try {
-            if(mult && prest && dispo && saldado){
+            if(prest && dispo && porFecha && taActivo){
                 String sql = "INSERT INTO prestamos (id_lector,id_ejemplar,estado,fecha_prestamo) VALUES (?,?,?,?)";
                 PreparedStatement ps = con.prepareStatement(sql);
 
@@ -54,29 +55,30 @@ public class PrestamoData {
                 JOptionPane.showMessageDialog(null, "Su prestamo se ha registrado!");
             }
             else{
-                if (!saldado){
-                   JOptionPane.showMessageDialog(null, "Usted tiene multas pendientes");
+                if(!dispo){
+                    JOptionPane.showMessageDialog(null, "Dicho ejemplar no esta disponible!");
                 }
-                else if (!dispo){
-                    JOptionPane.showMessageDialog(null, "El ejemplar ha sido prestado!");
-                }
-                else if (!prest && !mult){
-                    JOptionPane.showMessageDialog(null, "Usted adeuda libros y se encuentra con multas!");
+                else if(!prest && !porFecha){
+                    JOptionPane.showMessageDialog(null, "Usted adeuda 3 libros y tiene multas!");
                 }
                 else if (!prest){
-                    JOptionPane.showMessageDialog(null, "Usted adeuda 3 libros!");
+                    JOptionPane.showMessageDialog(null, "Usted ya adeuda 3 libros!");
+                }
+                else if (!porFecha){
+                    JOptionPane.showMessageDialog(null, "Usted tiene multas!");
+                }
+                else if(!taActivo){
+                    JOptionPane.showMessageDialog(null, "Usted ha sido dado de baja, regularice su situacion");
                 }
                 
-                else if (!mult){
-                    JOptionPane.showMessageDialog(null, "Usted se encuentra con multas!");
-                }             
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "No se pudo registrar su prestamo");
-            ex.getLocalizedMessage();
+           
         }       
     }  
     
+    //Modifica el prestamo y dependiendo del estado del ejemplar agrega la fecha_fin de la multa, ya que ya hay una fecha_inicio que se puso en chequeoEstado(EjemplarData)
     public void modificarPrestamo (Prestamo prestamo){
         String sql = "UPDATE prestamos SET estado=? WHERE id_prestamo=?";
     
@@ -87,33 +89,25 @@ public class PrestamoData {
             ps.setInt(2, prestamo.getIdPrestamo());
             
             ps.executeUpdate();
-            ps.close();
+           
             
             JOptionPane.showMessageDialog(null, "Se ha modificado su prestamo!");
-            
-             Conexion con = new Conexion();
-             EjemplarData eje = new EjemplarData (con);
-             eje.actualizarEstado(prestamo.getEjemplar(),"Disponible");
-            
-            int i = (int)ChronoUnit.DAYS.between(prestamo.getFecha_prestamo(), LocalDate.now());
-            
-            if(i > 30){
-                i -= 30;
-                Multa multa = new Multa(prestamo.getLector(), LocalDate.now().plusDays(i*2) ,LocalDate.now());
-                MultaData mul = new MultaData(con);
-                mul.agregarMulta(multa);
-                JOptionPane.showMessageDialog(null, "Se le pondra una multa de "+i*2+" dias por su tardanza");
+    
+            Conexion con = new Conexion(); 
+            EjemplarData eje = new EjemplarData (con);
+            if("Retraso".equals(eje.estadoEjemplar(prestamo.getEjemplar().getId_ejemplar()))){
+                MultaData mul = new MultaData (con);
+                mul.fechaFinal(prestamo.getIdPrestamo(), LocalDate.of(2021, Month.JUNE,7));
             }
-            else{
-                JOptionPane.showMessageDialog(null, "Ha entregado su ejemplar a tiempo!");
-
-            }
+            
+            eje.actualizarEstado(prestamo.getEjemplar(),"Disponible");
+            ps.close(); 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al modificar su prestamo!");
-        }
-    
+        }    
     }
     
+    //Anula el prestamo poniendo el prestamo en falso
     public void anularPrestamo (Prestamo prestamo){
         String sql = "UPDATE prestamos SET estado WHERE prestamos.id_prestamo=?";
         
@@ -137,24 +131,21 @@ public class PrestamoData {
         }    
     }
     
-    public boolean buscarMulta (int id_lector){
-        Conexion con = new Conexion();
-        MultaData mul = new MultaData (con);
-        return mul.buscarMulta(id_lector);
-    }   //FUNCIONA
-    
+    //Chequea que el ejemplar este disponible
     public boolean ejemDisponible (int id_ejemplar){
         Conexion con = new Conexion ();
         EjemplarData eje = new EjemplarData(con);
         return eje.ejemplarDisponible(id_ejemplar);
-    }  //FUNCIONA
+    }  
     
-    public boolean prestamoXFecha (int id_lector){   
+    //Chequea que las multas esten saldadas
+    public boolean prestamoXFecha (int id_prestamo){   
         Conexion con = new Conexion ();
         MultaData mul = new MultaData (con);
-        return mul.prestamoXFecha(id_lector);        
-    }   //FUNCIONA
+        return mul.prestamoXFecha(id_prestamo);        
+    }   
     
+    //Chequea que no tenga mas de 3 libros
     public boolean prestados (int id_lector){
         String sql = "SELECT id_lector FROM prestamos WHERE prestamos.id_lector = ? AND estado = 1";
         boolean pres = true;
@@ -174,7 +165,55 @@ public class PrestamoData {
             Logger.getLogger(PrestamoData.class.getName()).log(Level.SEVERE, null, ex);
         }
        return pres;  
-    }  //FUNCIONA
+    }  
+    
+    //Chequea que el lector este activo y sin ninguna deuda mayor a 3 meses
+    public boolean lectorActivo (int id_lector){
+        String sql = "SELECT estado_lector FROM lector WHERE id_lector =?";
+        boolean taActivo = true;
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            
+            ps.setInt(1, id_lector);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()){
+                if(rs.getBoolean(1) == false){
+                    taActivo = false;
+                }
+                
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(PrestamoData.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+        return taActivo;
+    }  
+    
+    //Busca un prestamo a traves del id_prestamo
+    public Prestamo buscarPrestamo (int id_prestamo){
+        String sql = "SELECT * FROM prestamos WHERE id_prestamo =?";
+        Prestamo prestamo = new Prestamo(new Lector(),new Ejemplar());
+        try {
+            PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1,id_prestamo);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()){
+                prestamo.setIdPrestamo(rs.getInt(1));
+                prestamo.getLector().setId_lector(rs.getInt(2));
+                prestamo.getEjemplar().setId_ejemplar(rs.getInt(3));
+                prestamo.setEstado(rs.getBoolean(4));
+                prestamo.setFecha_prestamo(rs.getDate(5).toLocalDate());
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(PrestamoData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return prestamo;
+    }
 
     public List <Prestamo> prestamoXFecha (LocalDate loc){
         ArrayList <Prestamo> pres = new ArrayList <> ();
@@ -203,7 +242,7 @@ public class PrestamoData {
             Logger.getLogger(PrestamoData.class.getName()).log(Level.SEVERE, null, ex);
         }
         return pres;
-    }
+    }  
     
     public List <Prestamo> prestamosVigentes (){
         ArrayList <Prestamo> pres = new ArrayList <> ();
@@ -231,7 +270,7 @@ public class PrestamoData {
             Logger.getLogger(PrestamoData.class.getName()).log(Level.SEVERE, null, ex);
         }
         return pres;
-    }   //FUNCIONA
+    }   
 
     public List <Lector> prestamosVencidos (){
         ArrayList <Lector> venci = new ArrayList<>();
@@ -257,7 +296,7 @@ public class PrestamoData {
         }
         
         return venci;
-    }  //FUNCIONA
+    }  
     
     public List <Lector> multasActivasXMes (int mes){
         ArrayList <Lector> mult = new ArrayList <> ();
@@ -282,6 +321,26 @@ public class PrestamoData {
             Logger.getLogger(PrestamoData.class.getName()).log(Level.SEVERE, null, ex);
         }
         return mult;
-    }  //FUNCIONA
+    }  
+    
+//    public boolean buscarMulta (int id_prestamo){
+//        String sql = "SELECT * FROM multa WHERE multa.id_prestamo = ?";
+//        boolean hayMulta = true;
+//        try {
+//            PreparedStatement ps = con.prepareStatement(sql);
+//            
+//            ps.setInt(1, id_prestamo);
+//            
+//            ResultSet rs = ps.executeQuery();
+//            
+//            if(rs.next()){
+//                hayMulta = false;
+//            }
+//            
+//        } catch (SQLException ex) {
+//            Logger.getLogger(MultaData.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return hayMulta;
+//    }
     
 }

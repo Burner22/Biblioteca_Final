@@ -2,11 +2,16 @@
 package modelo;
 
 import entidades.Ejemplar;
+import entidades.Multa;
+import entidades.Prestamo;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -36,11 +41,12 @@ public class EjemplarData {
                     ejemplar.setId_ejemplar(rs.getInt(1));
                 }
             }
+            JOptionPane.showMessageDialog(null, "Se han agregado sus ejemplares");
             ps.close();
         } catch (SQLException ex) {
-            Logger.getLogger(EjemplarData.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Error al agregar sus ejemplares");
         }      
-    }  //FUNCIONA
+    }  //Agrega una X cantidad de ejemplares de X libro
     
     public void actualizarEjemplar (Ejemplar ejemplar){
         String sql = "UPDATE ejemplar SET estado = ?,id_libro = ? WHERE id_ejemplar=?";
@@ -59,7 +65,7 @@ public class EjemplarData {
         } catch (SQLException ex) {
             Logger.getLogger(EjemplarData.class.getName()).log(Level.SEVERE, null, ex);
         }      
-    }
+    }   //Actualiza el ejemplar en general
     
     public void actualizarEstado (Ejemplar ejemplar,String estado){
         String sql = "UPDATE ejemplar SET estado =? WHERE id_ejemplar=?";
@@ -76,7 +82,7 @@ public class EjemplarData {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "ERROR");
         }        
-    }  //FUNCIONA
+    }  //Actualiza el estado del ejemplar atraves de String
     
     public boolean ejemplarDisponible (int id_ejemplar) {
         String sql = "SELECT estado FROM ejemplar WHERE ejemplar.id_ejemplar = ?";
@@ -88,17 +94,61 @@ public class EjemplarData {
             ps.setInt (1, id_ejemplar);
             
             ResultSet rs = ps.executeQuery();
-            rs.next();
-            aux = rs.getString(1);
-            
-            if (aux.equalsIgnoreCase("Disponible")){
+            if(rs.next()){
+              aux = rs.getString(1);  
+              if (aux.equalsIgnoreCase("Disponible") || aux == null){
                 est = true;
+                }
             }
-                      
+               
         } catch (SQLException ex) {
             Logger.getLogger(EjemplarData.class.getName()).log(Level.SEVERE, null, ex);
         }
       return est;    
-    }  //FUNCIONA
+    }  //Me devuelve si el ejemplar esta disponible
     
+    public void chequeoEstado (){
+        String sql = "SELECT id_prestamo,fecha_prestamo from prestamos,ejemplar WHERE prestamos.id_ejemplar = ejemplar.id_ejemplar AND prestamos.estado=1 AND ejemplar.estado = 'Prestado'";
+        
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()){
+                int i = (int) ChronoUnit.DAYS.between(rs.getDate(2).toLocalDate(), LocalDate.now());
+                if(i > 30){
+                    Conexion con = new Conexion();
+                    PrestamoData pre = new PrestamoData(con);
+                    Prestamo prestamo = pre.buscarPrestamo(rs.getInt(1));
+                    actualizarEstado(prestamo.getEjemplar(),"Retraso");
+                    Multa multa = new Multa (prestamo, LocalDate.now());
+                    MultaData mul = new MultaData (con);
+                    mul.agregarMulta(multa);
+                }
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(EjemplarData.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+    }   //Boton para refresar estado del ejemplar
+    
+    public String estadoEjemplar(int id_ejemplar){
+        String sql = "SELECT estado FROM ejemplar WHERE id_ejemplar=?";
+        String aux = null;
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            
+            ps.setInt(1, id_ejemplar);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()){
+                aux = rs.getString(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EjemplarData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return aux;
+    }  //Devuelvo un string con el estado del ejemplar
 }

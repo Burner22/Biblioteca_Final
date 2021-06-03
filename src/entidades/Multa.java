@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 public class Multa {
    int id_multa;
-   Lector lector;
+   Prestamo prestamo;
    LocalDate fecha_fin, fecha_inicio;
 
     public Multa() {
@@ -15,34 +15,39 @@ public class Multa {
     public Multa(int id_multa) {
         this.id_multa = id_multa;
     }
+
+    public Multa(Prestamo prestamo, LocalDate fecha_inicio) {
+        this.prestamo = prestamo;
+        this.fecha_inicio = fecha_inicio;
+    }
      
-    public Multa(Lector lector, LocalDate fecha_fin, LocalDate fecha_inicio) {
-        this.lector = lector;
+    public Multa(Prestamo prestamo,LocalDate fecha_fin, LocalDate fecha_inicio) {
         this.fecha_fin = fecha_fin;
         this.fecha_inicio = fecha_inicio;
+        this.prestamo = prestamo;
     }
 
-    public Multa(int id_multa, Lector lector, LocalDate fecha_fin, LocalDate fecha_inicio) {
+    public Multa(int id_multa,Prestamo prestamo, LocalDate fecha_fin, LocalDate fecha_inicio) {
         this.id_multa = id_multa;
-        this.lector = lector;
         this.fecha_fin = fecha_fin;
         this.fecha_inicio = fecha_inicio;
+        this.prestamo = prestamo;
     }
 
+    public Prestamo getPrestamo() {
+        return prestamo;
+    }
+
+    public void setPrestamo(Prestamo prestamo) {
+        this.prestamo = prestamo;
+    }
+    
     public int getId_multa() {
         return id_multa;
     }
 
     public void setId_multa(int id_multa) {
         this.id_multa = id_multa;
-    }
-
-    public Lector getLector() {
-        return lector;
-    }
-
-    public void setLector(Lector lector) {
-        this.lector = lector;
     }
 
     public LocalDate getFecha_fin() {

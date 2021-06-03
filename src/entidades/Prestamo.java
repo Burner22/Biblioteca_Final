@@ -21,17 +21,16 @@ public class Prestamo {
         this.ejemplar = ejemplar;
     }
 
-    public Prestamo(Lector lector, Ejemplar ejemplar) {
-        this.lector = lector;
-        this.ejemplar = ejemplar;
-    }
-
-
     public Prestamo(Lector lector, Ejemplar ejemplar, boolean estado, LocalDate fecha_prestamo) {
         this.lector = lector;
         this.ejemplar = ejemplar;
         this.estado = estado;
         this.fecha_prestamo = fecha_prestamo;
+    }
+    
+    public Prestamo(Lector lector, Ejemplar ejemplar) {
+        this.lector = lector;
+        this.ejemplar = ejemplar;
     }
 
     public Prestamo(int idPrestamo, Lector lector, Ejemplar ejemplar, boolean estado, LocalDate fecha_prestamo) {

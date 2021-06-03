@@ -13,19 +13,21 @@ public class Lector {
         this.id_lector = id_lector;
     }
 
-    public Lector(int dniLector, String nombreLector, String apellidoLector, String direLector) {
+    public Lector(int dniLector, String nombreLector, String apellidoLector, String direLector, boolean estado_lector) {
         this.dniLector = dniLector;
         this.nombreLector = nombreLector;
         this.apellidoLector = apellidoLector;
         this.direLector = direLector;
+        this.estado_lector = estado_lector;
     }
 
-    public Lector(int id_lector, int dniLector, String nombreLector, String apellidoLector, String direLector) {
+    public Lector(int id_lector, int dniLector, String nombreLector, String apellidoLector, String direLector, boolean estado_lector) {
         this.id_lector = id_lector;
         this.dniLector = dniLector;
         this.nombreLector = nombreLector;
         this.apellidoLector = apellidoLector;
         this.direLector = direLector;
+        this.estado_lector = estado_lector;
     }
 
     public int getId_lector() {
@@ -68,7 +70,7 @@ public class Lector {
         this.direLector = direLector;
     } 
 
-    public boolean isEstado_lector() {
+    public boolean getEstado_lector() {
         return estado_lector;
     }
 

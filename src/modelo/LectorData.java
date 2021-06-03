@@ -20,7 +20,7 @@ public class LectorData {
     }
     
     public void agregarLector (Lector lector){
-        String sql = "INSERT INTO lector (nombre_lector,apellido_lector,dni_lector,dire_lector) VALUES (?,?,?,?)";   
+        String sql = "INSERT INTO lector (nombre_lector,apellido_lector,dni_lector,dire_lector,estado_lector) VALUES (?,?,?,?,?)";   
     
         try {
             PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
@@ -29,6 +29,7 @@ public class LectorData {
             ps.setString(2, lector.getApellidoLector());
             ps.setInt(3, lector.getDniLector());
             ps.setString(4, lector.getDireLector());
+            ps.setBoolean(5, lector.getEstado_lector());
             
             ps.executeUpdate();
             ps.close();
@@ -40,7 +41,7 @@ public class LectorData {
     }  //FUNCIONA
     
     public void actualizarLector (Lector lector){
-        String sql = "UPDATE lector SET nombre_lector=?,apellido_lector=?,dni_lector=?,dire_lector=? WHERE id_lector=?";
+        String sql = "UPDATE lector SET nombre_lector=?,apellido_lector=?,dni_lector=?,dire_lector=?,estado_lector=? WHERE id_lector=?";
         
         try {
             PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
@@ -49,7 +50,8 @@ public class LectorData {
             ps.setString(2, lector.getApellidoLector());
             ps.setInt(3, lector.getDniLector());
             ps.setString(4, lector.getDireLector());
-            ps.setInt(5, lector.getId_lector());
+            ps.setBoolean(5, lector.getEstado_lector());
+            ps.setInt(6, lector.getId_lector());
             
             ps.executeUpdate();
             ps.close();
