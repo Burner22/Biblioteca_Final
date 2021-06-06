@@ -78,10 +78,10 @@ public class LibroData {
         
     }   //FUNCIONA
      
-    public List<Libro> buscarLibro(String nombre_libro){
+    public List<Libro> buscarLibro(String nombre_libro){// nombre_libro es una palabra clave que contenga el nombre del libro buscado
         List<Libro> libros=new ArrayList();
         String query="SELECT libro.id_libro,libro.id_autor, libro.ISBN,libro.nombre,libro.editorial,libro.año,libro.tipo,autor.nombre_autor,autor.apellido_autor,autor.dni_autor,autor.fech_nac,autor.nacionalidad FROM libro,autor WHERE libro.id_autor=autor.id_autor AND libro.nombre LIKE ?";
-        String nombreDeLibro="%"+nombre_libro+"%";
+        String nombreDeLibro="%"+nombre_libro+"%";//se contatenan los % adelante y atras ya que no se sabe en que posicion se encuentra la palabra clave
         try{
             PreparedStatement ps=con.prepareStatement(query);
             
