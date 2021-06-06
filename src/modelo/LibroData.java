@@ -11,6 +11,8 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LibroData {
     private Connection con;
@@ -76,34 +78,78 @@ public class LibroData {
         
     }   //FUNCIONA
      
-    public Libro buscarLibro(String nombre_libro){
-        Libro libro = new Libro();
-        String query="SELECT * FROM libro,autor WHERE libro.id_autor=autor.id_autor AND nombre_libro LIKE ?";
-        
+    public List<Libro> buscarLibro(String nombre_libro){
+        List<Libro> libros=new ArrayList();
+        String query="SELECT libro.id_libro,libro.id_autor, libro.ISBN,libro.nombre,libro.editorial,libro.año,libro.tipo,autor.nombre_autor,autor.apellido_autor,autor.dni_autor,autor.fech_nac,autor.nacionalidad FROM libro,autor WHERE libro.id_autor=autor.id_autor AND libro.nombre LIKE ?";
+        String nombreDeLibro="%"+nombre_libro+"%";
         try{
             PreparedStatement ps=con.prepareStatement(query);
             
-            ps.setString(1, nombre_libro+"%");
+            ps.setString(1, nombreDeLibro);
             
             ResultSet rs=ps.executeQuery();
             
             while(rs.next()){
-                libro.setId_libro(rs.getInt("id_libro"));
-                libro.setAño(rs.getInt("año"));
-                libro.setISBN(rs.getInt("ISBN"));
-                libro.setEditorial(rs.getString("editorial"));
-                libro.setNombre(rs.getString("nombre"));
-                libro.setTipo(rs.getString("tipo"));
+                Libro libro = new Libro();
                 Autor autor=new Autor();
-                autor.setId_autor(rs.getInt("id_lector"));
-                
-             
+                autor.setId_autor(rs.getInt("id_autor"));
+                autor.setApellidoAutor(rs.getString("apellido_autor"));
+                autor.setDni(rs.getInt("dni_autor"));
+                autor.setNombreAutor(rs.getString("nombre_autor"));
+                autor.setFecha_nac(rs.getDate("fech_nac").toLocalDate());
+                autor.setNacionalidad(rs.getString("nacionalidad"));
+                libro.setAutor(autor);
+                libro.setId_libro(rs.getInt("id_libro"));
+                libro.setISBN(rs.getInt("ISBN"));
+                libro.setNombre(rs.getString("nombre"));
+                libro.setEditorial(rs.getString("editorial"));
+                libro.setAño(rs.getInt("año"));
+                libro.setTipo(rs.getString("tipo"));
+                libros.add(libro);
+             JOptionPane.showMessageDialog(null, "Se encontro su libro ");
             }
             ps.close();
         }catch(SQLException ex){
            JOptionPane.showMessageDialog(null, "No se encontro su libro");
         }
         
-        return libro;
-    }
+        return libros;
+    }//funciona
+    public List<Libro> getAll(){
+        List<Libro> lista=new ArrayList();
+        
+        String query="SELECT libro.id_libro,libro.id_autor, libro.ISBN,libro.nombre,libro.editorial,libro.año,libro.tipo,autor.nombre_autor,autor.apellido_autor,autor.dni_autor,autor.fech_nac,autor.nacionalidad FROM libro,autor WHERE libro.id_autor=autor.id_autor ";
+       
+        try{
+            PreparedStatement ps=con.prepareStatement(query);
+            
+            ResultSet rs=ps.executeQuery();
+            
+            while(rs.next()){
+                Libro libro = new Libro();
+                Autor autor=new Autor();
+                autor.setId_autor(rs.getInt("id_autor"));
+                autor.setApellidoAutor(rs.getString("apellido_autor"));
+                autor.setDni(rs.getInt("dni_autor"));
+                autor.setNombreAutor(rs.getString("nombre_autor"));
+                autor.setFecha_nac(rs.getDate("fech_nac").toLocalDate());
+                autor.setNacionalidad(rs.getString("nacionalidad"));
+                libro.setAutor(autor);
+                libro.setId_libro(rs.getInt("id_libro"));
+                libro.setISBN(rs.getInt("ISBN"));
+                libro.setNombre(rs.getString("nombre"));
+                libro.setEditorial(rs.getString("editorial"));
+                libro.setAño(rs.getInt("año"));
+                libro.setTipo(rs.getString("tipo"));
+                lista.add(libro);
+             
+            }
+            ps.close();
+            JOptionPane.showMessageDialog(null, "Lista de libros en base de datos");
+        }catch(SQLException ex){
+           JOptionPane.showMessageDialog(null, "No se encontro su libro");
+        }
+        
+        return lista;
+    }//funciona
 }
