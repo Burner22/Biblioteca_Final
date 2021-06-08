@@ -37,9 +37,10 @@ public class MultaData {
             
             if(rs.next()){
                 multa.setId_multa(rs.getInt(1));
+                //Mostrar un mensaje al usuario notificandole que la multa se pudo registrar en la base de datos.
             }
             else{
-                JOptionPane.showMessageDialog(null, "Eror al agregar multa");
+                JOptionPane.showMessageDialog(null, "Eror al agregar multa");//Corregir mensaje a "Error al agregar multa".
             }
             
             ps.close();
