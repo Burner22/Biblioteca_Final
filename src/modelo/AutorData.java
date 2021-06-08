@@ -47,7 +47,7 @@ public class AutorData {
             }
             
             ps.close();
-            JOptionPane.showMessageDialog(null, "Su autor ha sido agregado!");          
+            JOptionPane.showMessageDialog(null, "Su autor ha sido agregado!");//Este mensaje deberia aparecer despues de que se settea el id al autor.     
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Ocurrio un error a la hora de registrar autor!");
         }    
@@ -76,7 +76,7 @@ public class AutorData {
         } 
     }  //FUNCIONA
     
-    public Autor buscarLector(String nombre,String apellido){
+    public Autor buscarLector(String nombre,String apellido){//Cambiar el nombre del metodo a buscarAutor.
         String query="SELECT * FROM autor WHERE apellido_autor LIKE ? AND nombre_autor LIKE ?";
         Autor autor=new Autor();
         try{
