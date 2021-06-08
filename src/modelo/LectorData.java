@@ -39,6 +39,8 @@ public class LectorData {
             ps.setBoolean(5, lector.getEstado_lector());
             
             ps.executeUpdate();
+            //Crear un ResultSet con las claves generadas.
+            //Añadir el id generado por la base de datos al lector con .setId_lector.
             ps.close();
             JOptionPane.showMessageDialog(null,"Se ha agregado su lector!");
             
@@ -51,7 +53,7 @@ public class LectorData {
         String sql = "UPDATE lector SET nombre_lector=?,apellido_lector=?,dni_lector=?,dire_lector=?,estado_lector=? WHERE id_lector=?";
         
         try {
-            PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);//Se esta actualizando un lector, no hace falta pedir de vuelta las keys de la base de datos.
                   
             ps.setString(1, lector.getNombreLector());
             ps.setString(2, lector.getApellidoLector());
@@ -64,11 +66,11 @@ public class LectorData {
             ps.close();
             JOptionPane.showMessageDialog(null, "Se ha actualizado su Lector");
         }catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al agregar lector!");
+            JOptionPane.showMessageDialog(null, "Error al agregar lector!");//Cambiar mensaje a "Error al actualizar un lector".
         } 
     }   //FUNCIONA
     
-    public Lector buscarLector(int id_lector){
+    public Lector buscarLector(int id_lector){//Sugerencia: buscar a un lector por dni y no por id.
         String query="SELECT * FROM lector WHERE id_lector=?";
         Lector lector=new Lector();
         try{
@@ -78,6 +80,9 @@ public class LectorData {
             
             ResultSet rs=ps.executeQuery();
             
+            //Suponiendo que usemos el id_lector para buscar a un lector, no seria mejor usar un if?. 
+            //El id representa a un unico elemento en una tabla, por lo tanto, devolveria un solo elemento. 
+            //por qué usar un while solo para que itere una sola vez?
             while(rs.next()){
                 lector.setId_lector(rs.getInt("id_lector"));
                 lector.setNombreLector(rs.getString("nombre_lector"));
@@ -87,6 +92,7 @@ public class LectorData {
                 lector.setEstado_lector(rs.getBoolean("estado_lector"));
             }
             
+            //Mostrar un mensaje si el lector que se busca no existe en la tabla lector.
             ps.close();
             
         }catch(SQLException ex){
@@ -104,7 +110,7 @@ public class LectorData {
             
             ps.executeUpdate();
             ps.close();
-            
+            //Mostrar un mensaje que indique si el lector ha sido activado o a sido dado de baja;
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "error al buscar lector");
         }
