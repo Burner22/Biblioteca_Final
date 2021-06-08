@@ -79,6 +79,7 @@ public class EjemplarData {
             
             ps.executeUpdate();
             ps.close();
+            //Mostrar un mensaje que notifique que el estado del ejemplar fue actualizado.
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "ERROR");
         }        
