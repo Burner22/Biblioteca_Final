@@ -48,6 +48,7 @@ public class PrestamoData {
                 ps.executeUpdate();
                 ps.close();
                 
+                //Sugerencia: setear el id al prestamo.
                 Conexion con = new Conexion();
                 EjemplarData eje = new EjemplarData (con);
                 eje.actualizarEstado(prestamo.getEjemplar(),"Prestado");
@@ -79,7 +80,7 @@ public class PrestamoData {
     }  
     
     //Modifica el prestamo y dependiendo del estado del ejemplar agrega la fecha_fin de la multa, ya que ya hay una fecha_inicio que se puso en chequeoEstado(EjemplarData)
-    public void modificarPrestamo (Prestamo prestamo){
+    public void modificarPrestamo (Prestamo prestamo){//Sugerencia: cambiar el nombre a "entregarPrestamo".
         String sql = "UPDATE prestamos SET estado=? WHERE id_prestamo=?";
     
         try {
@@ -119,7 +120,7 @@ public class PrestamoData {
             ps.executeUpdate();
             ps.close();
             
-            JOptionPane.showMessageDialog(null, "Se ha modificado su prestamo!");
+            JOptionPane.showMessageDialog(null, "Se ha modificado su prestamo!");//Cambiar mensaje a "Se ha anuluado su prestamo!".
             
              Conexion con = new Conexion();
              EjemplarData eje = new EjemplarData (con);
@@ -193,14 +194,15 @@ public class PrestamoData {
     //Busca un prestamo a traves del id_prestamo
     public Prestamo buscarPrestamo (int id_prestamo){
         String sql = "SELECT * FROM prestamos WHERE id_prestamo =?";
-        Prestamo prestamo = new Prestamo(new Lector(),new Ejemplar());
+        Prestamo prestamo = new Prestamo(new Lector(),new Ejemplar());//Sugerencia: crear un prestamo que sea igual a null;
         try {
-            PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);//No hace falta pedir las keys de la bd.
             ps.setInt(1,id_prestamo);
             
             ResultSet rs = ps.executeQuery();
             
             if(rs.next()){
+                //Y luego crear un nuevo prestamo en el if con new Prestamo(new Lector(),new Ejemplar()).
                 prestamo.setIdPrestamo(rs.getInt(1));
                 prestamo.getLector().setId_lector(rs.getInt(2));
                 prestamo.getEjemplar().setId_ejemplar(rs.getInt(3));
@@ -244,7 +246,7 @@ public class PrestamoData {
     }  
     
     public List <Prestamo> prestamosVigentes (){
-        ArrayList <Prestamo> pres = new ArrayList <> ();
+        ArrayList <Prestamo> pres = new ArrayList <> ();//Sugerencia: cambiar el nombre del arrayList a "pVigentes".
         Prestamo prestamo;
       
         String sql = "SELECT * FROM prestamos WHERE estado=1";
@@ -272,7 +274,7 @@ public class PrestamoData {
     }   
 
     public List <Lector> prestamosVencidos (){
-        ArrayList <Lector> venci = new ArrayList<>();
+        ArrayList <Lector> venci = new ArrayList<>();//Sugerencia: cambiar nombre del arrayList a "lectoresPVencidos".
         String sql = "SELECT lector.id_lector,lector.nombre_lector,lector.apellido_lector,lector.dni_lector,lector.dire_lector FROM lector JOIN prestamos ON lector.id_lector=prestamos.id_lector JOIN ejemplar ON ejemplar.id_ejemplar=prestamos.id_ejemplar AND ejemplar.estado='Retraso'";
         Lector lector;
         try {
