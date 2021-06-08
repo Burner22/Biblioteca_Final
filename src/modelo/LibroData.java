@@ -48,7 +48,7 @@ public class LibroData {
         
             ps.close();
             
-            JOptionPane.showMessageDialog(null, "Se ha agregado su libro con exito!");
+            JOptionPane.showMessageDialog(null, "Se ha agregado su libro con exito!");//Este mensaje deberia aparecer despues de que se settea el id al libro. 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al agregar su libro!");
         } 
@@ -106,8 +106,9 @@ public class LibroData {
                 libro.setAño(rs.getInt("año"));
                 libro.setTipo(rs.getString("tipo"));
                 libros.add(libro);
-             JOptionPane.showMessageDialog(null, "Se encontro su libro ");
+             JOptionPane.showMessageDialog(null, "Se encontro su libro ");//Cada vez que se agregue un libro salta el mensaje.
             }
+            //Seria mejor revisar que, si por lo menos hay uno o mas libros en la lista, recien en ese momento mostrar el mensaje "Se encontro su libro".
             ps.close();
         }catch(SQLException ex){
            JOptionPane.showMessageDialog(null, "No se encontro su libro");
@@ -147,7 +148,7 @@ public class LibroData {
             ps.close();
             JOptionPane.showMessageDialog(null, "Lista de libros en base de datos");
         }catch(SQLException ex){
-           JOptionPane.showMessageDialog(null, "No se encontro su libro");
+           JOptionPane.showMessageDialog(null, "No se encontro su libro");//Cambiar mensaje a "Error al obtener todos los libros"
         }
         
         return lista;
