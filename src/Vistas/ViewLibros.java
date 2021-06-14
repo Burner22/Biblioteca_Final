@@ -5,9 +5,16 @@
  */
 package Vistas;
 
+import entidades.Autor;
+import entidades.Libro;
 import java.awt.Image;
+import java.util.List;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import modelo.AutorData;
+import modelo.Conexion;
+import modelo.LibroData;
 
 
 /**
@@ -15,19 +22,28 @@ import javax.swing.ImageIcon;
  * @author Chony
  */
 public class ViewLibros extends javax.swing.JInternalFrame {
-
-    /**
-     * Creates new form ViewAutor
-     */
+    private AutorData ad;
+    private LibroData ld;
+    
     public ViewLibros() {
         initComponents();
+        Conexion c=new Conexion();
+        ld=new LibroData(c);
+        ad=new AutorData(c);
         cargaIconos();
+        cargaCombo();
+        jbGuardar.setEnabled(false);
         
+        
+    }
+    public void cargaCombo(){
+        List<Autor> lista=ad.getAll();
+        for(Autor a:lista){
+            jcbAutor.addItem(a);
+        }
     }
     public void cargaIconos(){
         jbGuardar.setIcon(setIcono("/imagen/floppy.png"));
-        jbActualizar.setIcon(setIcono("/imagen/filesaveas.png"));
-        jbLimpiar.setIcon(setIcono("/imagen/clear.png"));
         jbSalir.setIcon(setIcono("/imagen/salir.png"));
     }
 
@@ -48,21 +64,19 @@ public class ViewLibros extends javax.swing.JInternalFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jtApellido = new javax.swing.JTextPane();
+        jtIsbn = new javax.swing.JTextPane();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jtNacionalidad = new javax.swing.JTextPane();
+        jtEditorial = new javax.swing.JTextPane();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jtDni = new javax.swing.JTextPane();
-        jbActualizar = new javax.swing.JButton();
-        jbLimpiar = new javax.swing.JButton();
+        jtNombre = new javax.swing.JTextPane();
         jbSalir = new javax.swing.JButton();
         jbGuardar = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jcbAutor = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jtNacionalidad1 = new javax.swing.JTextPane();
+        jtTipo = new javax.swing.JTextPane();
         jScrollPane6 = new javax.swing.JScrollPane();
-        jtDni1 = new javax.swing.JTextPane();
+        jtAño = new javax.swing.JTextPane();
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("Carga de libros");
@@ -77,15 +91,11 @@ public class ViewLibros extends javax.swing.JInternalFrame {
 
         jLabel6.setText("Editorial:");
 
-        jScrollPane1.setViewportView(jtApellido);
+        jScrollPane1.setViewportView(jtIsbn);
 
-        jScrollPane2.setViewportView(jtNacionalidad);
+        jScrollPane2.setViewportView(jtEditorial);
 
-        jScrollPane4.setViewportView(jtDni);
-
-        jbActualizar.setText("Actualizar");
-
-        jbLimpiar.setText("Limpiar");
+        jScrollPane4.setViewportView(jtNombre);
 
         jbSalir.setText("Salir");
         jbSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -95,58 +105,61 @@ public class ViewLibros extends javax.swing.JInternalFrame {
         });
 
         jbGuardar.setText("Guardar");
+        jbGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbGuardarActionPerformed(evt);
+            }
+        });
 
         jLabel7.setText("Tipo:");
 
-        jScrollPane5.setViewportView(jtNacionalidad1);
+        jtTipo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtTipoFocusGained(evt);
+            }
+        });
+        jScrollPane5.setViewportView(jtTipo);
 
-        jScrollPane6.setViewportView(jtDni1);
+        jScrollPane6.setViewportView(jtAño);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(21, 21, 21)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
                         .addComponent(jbGuardar)
-                        .addGap(18, 18, 18)
-                        .addComponent(jbActualizar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jbLimpiar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jbSalir))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(88, 88, 88)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addGap(110, 110, 110)
-                                .addComponent(jLabel1))
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(0, 67, Short.MAX_VALUE)))
-                .addContainerGap())
+                    .addComponent(jScrollPane5)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5)
+                    .addComponent(jScrollPane4)
+                    .addComponent(jScrollPane2)
+                    .addComponent(jLabel6)
+                    .addComponent(jcbAutor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane6)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(158, 158, 158))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(40, 40, 40)
+                .addGap(29, 29, 29)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jcbAutor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(15, 15, 15)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -167,20 +180,21 @@ public class ViewLibros extends javax.swing.JInternalFrame {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbActualizar)
-                    .addComponent(jbLimpiar)
-                    .addComponent(jbSalir)
-                    .addComponent(jbGuardar))
-                .addGap(68, 68, 68))
+                    .addComponent(jbGuardar)
+                    .addComponent(jbSalir))
+                .addGap(54, 54, 54))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(23, 23, 23))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -194,6 +208,36 @@ public class ViewLibros extends javax.swing.JInternalFrame {
         dispose();
     }//GEN-LAST:event_jbSalirActionPerformed
 
+    private void jtTipoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtTipoFocusGained
+       if(jtAño!=null && jtEditorial!=null && jtIsbn!=null && jtNombre!=null && jtTipo.isFocusOwner()){
+           jbGuardar.setEnabled(true);
+       }
+    
+    }//GEN-LAST:event_jtTipoFocusGained
+
+    private void jbGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGuardarActionPerformed
+        Autor a= (Autor)jcbAutor.getSelectedItem();
+        Libro l=new Libro();
+        if(a!=null){
+            l.setAutor(a);
+            l.setISBN(Integer.parseInt(jtIsbn.getText()));
+            l.setAño(Integer.parseInt(jtAño.getText()));
+            l.setNombre(jtNombre.getText());
+            l.setEditorial(jtEditorial.getText());
+            l.setTipo(jtTipo.getText());
+            try{
+                ld.agregarLibro(l);
+                jtIsbn.setText(" ");
+                jtAño.setText(" ");
+                jtNombre.setText(" ");
+                jtEditorial.setText(" ");
+                jtTipo.setText(" ");
+            }catch(NullPointerException npe){
+                JOptionPane.showMessageDialog(this, "no se pudo realizar la accion");
+            }
+        }
+    }//GEN-LAST:event_jbGuardarActionPerformed
+
     public Icon setIcono(String url){
         ImageIcon icon=new ImageIcon(getClass().getResource(url));
         
@@ -201,7 +245,6 @@ public class ViewLibros extends javax.swing.JInternalFrame {
         return icono;
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -215,14 +258,13 @@ public class ViewLibros extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JButton jbActualizar;
     private javax.swing.JButton jbGuardar;
-    private javax.swing.JButton jbLimpiar;
     private javax.swing.JButton jbSalir;
-    private javax.swing.JTextPane jtApellido;
-    private javax.swing.JTextPane jtDni;
-    private javax.swing.JTextPane jtDni1;
-    private javax.swing.JTextPane jtNacionalidad;
-    private javax.swing.JTextPane jtNacionalidad1;
+    private javax.swing.JComboBox<Autor> jcbAutor;
+    private javax.swing.JTextPane jtAño;
+    private javax.swing.JTextPane jtEditorial;
+    private javax.swing.JTextPane jtIsbn;
+    private javax.swing.JTextPane jtNombre;
+    private javax.swing.JTextPane jtTipo;
     // End of variables declaration//GEN-END:variables
 }

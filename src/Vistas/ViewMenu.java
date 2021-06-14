@@ -20,6 +20,7 @@ public class ViewMenu extends javax.swing.JFrame {
      */
     public ViewMenu() {
         initComponents();
+        
     }
 
     /**
@@ -44,8 +45,10 @@ public class ViewMenu extends javax.swing.JFrame {
         jmiSalir = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jmiAutores = new javax.swing.JMenuItem();
+        jmiBusqueda = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jmiLibro = new javax.swing.JMenuItem();
+        jmiBuscarLibro = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
@@ -83,6 +86,11 @@ public class ViewMenu extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Autores");
+        jMenu2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu2ActionPerformed(evt);
+            }
+        });
 
         jmiAutores.setText("Alta de autores");
         jmiAutores.addActionListener(new java.awt.event.ActionListener() {
@@ -91,6 +99,14 @@ public class ViewMenu extends javax.swing.JFrame {
             }
         });
         jMenu2.add(jmiAutores);
+
+        jmiBusqueda.setText("Busqueda y Actualización");
+        jmiBusqueda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiBusquedaActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jmiBusqueda);
 
         jMenuBar1.add(jMenu2);
 
@@ -103,6 +119,14 @@ public class ViewMenu extends javax.swing.JFrame {
             }
         });
         jMenu3.add(jmiLibro);
+
+        jmiBuscarLibro.setText("Buscar y Actualizar");
+        jmiBuscarLibro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiBuscarLibroActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jmiBuscarLibro);
 
         jMenuBar1.add(jMenu3);
 
@@ -174,6 +198,28 @@ public class ViewMenu extends javax.swing.JFrame {
         escritorio.moveToFront(vl);
     }//GEN-LAST:event_jmiLibroActionPerformed
 
+    private void jMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu2ActionPerformed
+      
+    }//GEN-LAST:event_jMenu2ActionPerformed
+
+    private void jmiBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiBusquedaActionPerformed
+         escritorio.removeAll();
+        escritorio.repaint();
+        ViewAutorBusqueda vab=new ViewAutorBusqueda();
+        vab.setVisible(true);
+        escritorio.add(vab);
+        escritorio.moveToFront(vab);
+    }//GEN-LAST:event_jmiBusquedaActionPerformed
+
+    private void jmiBuscarLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiBuscarLibroActionPerformed
+        escritorio.removeAll();
+        escritorio.repaint();
+        ViewLibroBusqueda vlb= new ViewLibroBusqueda();
+        vlb.setVisible(true);
+        escritorio.add(vlb);
+        escritorio.moveToFront(vlb);
+    }//GEN-LAST:event_jmiBuscarLibroActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -224,6 +270,8 @@ public class ViewMenu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jmiAutores;
+    private javax.swing.JMenuItem jmiBuscarLibro;
+    private javax.swing.JMenuItem jmiBusqueda;
     private javax.swing.JMenuItem jmiLibro;
     private javax.swing.JMenuItem jmiSalir;
     // End of variables declaration//GEN-END:variables

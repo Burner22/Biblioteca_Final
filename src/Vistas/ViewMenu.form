@@ -30,6 +30,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Autores"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenu2ActionPerformed"/>
+          </Events>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jmiAutores">
               <Properties>
@@ -37,6 +40,14 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmiAutoresActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jmiBusqueda">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Busqueda y Actualizaci&#xf3;n"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmiBusquedaActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -52,6 +63,14 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmiLibroActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jmiBuscarLibro">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Buscar y Actualizar"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmiBuscarLibroActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
