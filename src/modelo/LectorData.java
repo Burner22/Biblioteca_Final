@@ -72,7 +72,7 @@ public class LectorData {
     
     public Lector buscarLector(int id_lector){//Sugerencia: buscar a un lector por dni y no por id.
         String query="SELECT * FROM lector WHERE id_lector=?";
-        Lector lector=new Lector();
+        Lector lector=null;
         try{
             PreparedStatement ps=con.prepareStatement(query);
             
@@ -84,6 +84,7 @@ public class LectorData {
             //El id representa a un unico elemento en una tabla, por lo tanto, devolveria un solo elemento. 
             //por qué usar un while solo para que itere una sola vez?
             while(rs.next()){
+                lector=new Lector();
                 lector.setId_lector(rs.getInt("id_lector"));
                 lector.setNombreLector(rs.getString("nombre_lector"));
                 lector.setApellidoLector(rs.getString("apellido_lector"));
