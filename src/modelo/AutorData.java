@@ -126,5 +126,32 @@ public class AutorData {
             JOptionPane.showMessageDialog(null,"No se consiguio la lista de Autores");
         }
         return l_autores;
-    }//retorna todos los autores dentro de la tabla autor, funciona 
+    }//retorna todos los autores dentro de la tabla autor, funciona
+    
+    public Autor buscarAutorUnico(int id_autor){
+        Autor autor = null;
+        String sql = "SELECT * FROM autor WHERE id_autor = ?";
+        
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id_autor);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()){
+                autor = new Autor();
+                autor.setId_autor(rs.getInt(1));
+                autor.setNombreAutor(rs.getString(2));
+                autor.setApellidoAutor(rs.getString(3));
+                autor.setDni(rs.getInt(4));
+                autor.setFecha_nac(LocalDate.parse(rs.getString(5)));
+                autor.setNacionalidad(rs.getString(6));
+            }
+            
+            ps.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error en buscar autor unico!" + ex.getMessage());
+        }
+        return autor;
+    }
 }
