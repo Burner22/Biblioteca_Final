@@ -56,9 +56,8 @@ public class ViewMenu extends javax.swing.JFrame {
         jmiCargaLectores = new javax.swing.JMenuItem();
         jmiBusquedaLectores = new javax.swing.JMenuItem();
         jMenu6 = new javax.swing.JMenu();
-        jMenuItem6 = new javax.swing.JMenuItem();
-        jMenu7 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        jmiCargaPrestamos = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -174,17 +173,23 @@ public class ViewMenu extends javax.swing.JFrame {
 
         jMenu6.setText("Prestamos");
 
-        jMenuItem6.setText("Carga de prestamos");
-        jMenu6.add(jMenuItem6);
+        jmiCargaPrestamos.setText("Carga de prestamos");
+        jmiCargaPrestamos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiCargaPrestamosActionPerformed(evt);
+            }
+        });
+        jMenu6.add(jmiCargaPrestamos);
+
+        jMenuItem2.setText("Anulacion");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu6.add(jMenuItem2);
 
         jMenuBar1.add(jMenu6);
-
-        jMenu7.setText("Consultas");
-
-        jMenuItem1.setText("Prestamos activos");
-        jMenu7.add(jMenuItem1);
-
-        jMenuBar1.add(jMenu7);
 
         setJMenuBar(jMenuBar1);
 
@@ -284,6 +289,24 @@ public class ViewMenu extends javax.swing.JFrame {
         escritorio.moveToFront(veb);
     }//GEN-LAST:event_jmiBusquedaEjemplaresActionPerformed
 
+    private void jmiCargaPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiCargaPrestamosActionPerformed
+       escritorio.removeAll();
+        escritorio.repaint();
+        ViewPrestamos vp=new ViewPrestamos();
+        vp.setVisible(true);
+        escritorio.add(vp);
+        escritorio.moveToFront(vp);
+    }//GEN-LAST:event_jmiCargaPrestamosActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        escritorio.removeAll();
+        escritorio.repaint();
+        ViewPrestamosAnulacion vpa=new ViewPrestamosAnulacion();
+        vpa.setVisible(true);
+        escritorio.add(vpa);
+        escritorio.moveToFront(vpa);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -327,10 +350,8 @@ public class ViewMenu extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
-    private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jmiAltaEjemplares;
     private javax.swing.JMenuItem jmiAutores;
     private javax.swing.JMenuItem jmiBuscarLibro;
@@ -338,6 +359,7 @@ public class ViewMenu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jmiBusquedaEjemplares;
     private javax.swing.JMenuItem jmiBusquedaLectores;
     private javax.swing.JMenuItem jmiCargaLectores;
+    private javax.swing.JMenuItem jmiCargaPrestamos;
     private javax.swing.JMenuItem jmiLibro;
     private javax.swing.JMenuItem jmiSalir;
     // End of variables declaration//GEN-END:variables

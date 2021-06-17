@@ -76,7 +76,7 @@ public class AutorData {
         } 
     }  //FUNCIONA
     
-    public Autor buscarLector(String nombre,String apellido){//Cambiar el nombre del metodo a buscarAutor.
+    public Autor buscarAutor(String nombre,String apellido){//Cambiar el nombre del metodo a buscarAutor.
         String query="SELECT * FROM autor WHERE apellido_autor LIKE ? AND nombre_autor LIKE ?";
         Autor autor=new Autor();
         try{

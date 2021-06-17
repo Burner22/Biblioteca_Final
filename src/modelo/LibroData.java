@@ -98,6 +98,7 @@ public class LibroData {
                 autor.setNombreAutor(rs.getString("nombre_autor"));
                 autor.setFecha_nac(rs.getDate("fech_nac").toLocalDate());
                 autor.setNacionalidad(rs.getString("nacionalidad"));
+                
                 libro.setAutor(autor);
                 libro.setId_libro(rs.getInt("id_libro"));
                 libro.setISBN(rs.getInt("ISBN"));
@@ -106,6 +107,7 @@ public class LibroData {
                 libro.setAño(rs.getInt("año"));
                 libro.setTipo(rs.getString("tipo"));
                 libros.add(libro);
+                
              JOptionPane.showMessageDialog(null, "Se encontro su libro ");//Cada vez que se agregue un libro salta el mensaje.
             }
             //Seria mejor revisar que, si por lo menos hay uno o mas libros en la lista, recien en ese momento mostrar el mensaje "Se encontro su libro".

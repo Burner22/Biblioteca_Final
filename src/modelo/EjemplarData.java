@@ -1,6 +1,7 @@
 
 package modelo;
 
+import entidades.Autor;
 import entidades.Ejemplar;
 import entidades.Libro;
 import entidades.Multa;
@@ -13,6 +14,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -178,4 +181,99 @@ public class EjemplarData {
         }
         return ejemplar;
     }
+    
+    public List<Ejemplar> buscarEjemplar(String nombre_libro){
+        String query="SELECT id_ejemplar,estado,ejemplar.id_libro,ISBN,nombre,editorial,año,tipo,libro.id_autor, nombre_autor,apellido_autor,fech_nac, autor.dni_autor,nacionalidad FROM ejemplar, libro,autor WHERE ejemplar.id_libro=libro.id_libro and libro.id_autor=autor.id_autor and libro.nombre like ?";
+        String nom="%"+nombre_libro+"%";
+        List<Ejemplar> aux= new ArrayList();
+        
+        try{
+            PreparedStatement ps=con.prepareStatement(query);
+            ps.setString(1, nom);
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+               Autor autor=new Autor();
+               Libro libro=new Libro();
+               Ejemplar ejemplar=new Ejemplar();
+              try{
+               autor.setId_autor(rs.getInt("id_autor"));
+               autor.setNombreAutor(rs.getString("nombre_autor"));
+               autor.setApellidoAutor(rs.getString("apellido_autor"));
+               autor.setDni(rs.getInt("dni_autor"));
+               autor.setFecha_nac(LocalDate.parse(rs.getString("fech_nac")));
+               autor.setNacionalidad(rs.getString("nacionalidad"));
+               
+               libro.setAutor(autor);
+               libro.setId_libro(rs.getInt("id_libro"));
+               libro.setISBN(rs.getInt("ISBN"));
+               libro.setNombre(rs.getString("nombre"));
+               libro.setEditorial(rs.getString("editorial"));
+               libro.setAño(rs.getInt("año"));
+               libro.setTipo(rs.getString("tipo"));
+               
+               ejemplar.setEstado(rs.getString("estado"));
+               ejemplar.setId_ejemplar(rs.getInt("id_ejemplar"));
+               ejemplar.setLibro(libro);
+               
+               aux.add(ejemplar);
+               JOptionPane.showMessageDialog(null, "ejemplar encontrado");
+              }catch(NumberFormatException nfe){
+                  JOptionPane.showMessageDialog(null, "error en campos");
+              }
+               
+            }
+            ps.close();
+        }catch(SQLException ex){
+            Logger.getLogger(EjemplarData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return aux;
+        
+    }
+    public Ejemplar BuscarEjemplarID(int id){
+        String query="SELECT id_ejemplar,estado,ejemplar.id_libro,ISBN,nombre,editorial,año,tipo,libro.id_autor, nombre_autor,apellido_autor,fech_nac, autor.dni_autor,nacionalidad FROM ejemplar, libro,autor WHERE ejemplar.id_libro=libro.id_libro and libro.id_autor=autor.id_autor and ejemplar.id_ejemplar=?";
+        Ejemplar ejemplar=new Ejemplar();
+        try{
+            PreparedStatement ps=con.prepareStatement(query);
+            ps.setInt(1, id);
+            ResultSet rs=ps.executeQuery();
+            
+            while(rs.next()){
+               Autor autor=new Autor();
+               Libro libro=new Libro();
+        
+              try{
+               autor.setId_autor(rs.getInt("id_autor"));
+               autor.setNombreAutor(rs.getString("nombre_autor"));
+               autor.setApellidoAutor(rs.getString("apellido_autor"));
+               autor.setDni(rs.getInt("dni_autor"));
+               autor.setFecha_nac(LocalDate.parse(rs.getString("fech_nac")));
+               autor.setNacionalidad(rs.getString("nacionalidad"));
+               
+               libro.setAutor(autor);
+               libro.setId_libro(rs.getInt("id_libro"));
+               libro.setISBN(rs.getInt("ISBN"));
+               libro.setNombre(rs.getString("nombre"));
+               libro.setEditorial(rs.getString("editorial"));
+               libro.setAño(rs.getInt("año"));
+               libro.setTipo(rs.getString("tipo"));
+               
+               ejemplar.setEstado(rs.getString("estado"));
+               ejemplar.setId_ejemplar(rs.getInt("id_ejemplar"));
+               ejemplar.setLibro(libro);
+               
+               JOptionPane.showMessageDialog(null, "ejemplar encontrado");
+              }catch(NumberFormatException nfe){
+                  JOptionPane.showMessageDialog(null, "error en campos");
+              }
+               
+            }
+            ps.close();
+        }catch(SQLException ex){
+            Logger.getLogger(EjemplarData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+               
+        return ejemplar;
+    }
 }
+

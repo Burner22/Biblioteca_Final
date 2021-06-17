@@ -1,8 +1,10 @@
 
 package modelo;
 
+import entidades.Autor;
 import entidades.Ejemplar;
 import entidades.Lector;
+import entidades.Libro;
 import entidades.Multa;
 import entidades.Prestamo;
 import java.sql.Connection;
@@ -46,6 +48,7 @@ public class PrestamoData {
                 ps.setBoolean(3, prestamo.getEstado());
                 ps.setDate(4, Date.valueOf(prestamo.getFecha_prestamo()));
                 ps.executeUpdate();
+                
                 ps.close();
                 
                 //Sugerencia: setear el id al prestamo.
@@ -249,19 +252,50 @@ public class PrestamoData {
         ArrayList <Prestamo> pres = new ArrayList <> ();//Sugerencia: cambiar el nombre del arrayList a "pVigentes".
         Prestamo prestamo;
       
-        String sql = "SELECT * FROM prestamos WHERE estado=1";
+        String sql = "SELECT prestamos.id_prestamo,prestamos.id_ejemplar,prestamos.estado, prestamos.fecha_prestamo,ejemplar.id_libro,ISBN,nombre,editorial,año,tipo,libro.id_autor, nombre_autor,apellido_autor,fech_nac,autor.dni_autor,nacionalidad,prestamos.id_lector,lector.id_lector,lector.nombre_lector, lector.apellido_lector,lector.dni_lector,lector.dire_lector,lector.estado_lector FROM prestamos,ejemplar, libro,autor,lector WHERE prestamos.id_ejemplar=ejemplar.id_ejemplar AND prestamos.id_lector=lector.id_lector AND ejemplar.id_libro=libro.id_libro AND libro.id_autor=autor.id_autor AND prestamos.estado=1";
         
         try {
             PreparedStatement ps = con.prepareStatement(sql);        
          
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                prestamo = new Prestamo (new Lector(),new Ejemplar());
-                prestamo.setIdPrestamo(rs.getInt(rs.getInt(1)));
-                prestamo.getLector().setId_lector(rs.getInt(2));
-                prestamo.getEjemplar().setId_ejemplar(rs.getInt(3));
-                prestamo.setEstado(rs.getBoolean(4));
-                prestamo.setFecha_prestamo(rs.getDate(5).toLocalDate());
+                prestamo = new Prestamo();
+                Ejemplar ejemplar=new Ejemplar();
+                Lector lector=new Lector();
+                Libro libro=new Libro();
+                Autor autor=new Autor();
+                
+                autor.setId_autor(rs.getInt("id_autor"));
+                autor.setNombreAutor(rs.getString("nombre_autor"));
+                autor.setApellidoAutor(rs.getString("apellido_autor"));
+                autor.setDni(rs.getInt("dni_autor"));
+                autor.setFecha_nac(LocalDate.parse(rs.getString("fech_nac")));
+                autor.setNacionalidad(rs.getString("nacionalidad"));
+                
+                libro.setAutor(autor);
+                libro.setId_libro(rs.getInt("id_libro"));
+                libro.setISBN(rs.getInt("ISBN"));
+                libro.setNombre(rs.getString("nombre"));
+                libro.setEditorial(rs.getString("editorial"));
+                libro.setAño(rs.getInt("año"));
+                libro.setTipo(rs.getString("tipo"));
+                
+                ejemplar.setEstado(rs.getString("estado"));
+                ejemplar.setId_ejemplar(rs.getInt("id_ejemplar"));
+                ejemplar.setLibro(libro);
+                
+                lector.setId_lector(rs.getInt("id_lector"));
+                lector.setNombreLector(rs.getString("nombre_lector"));
+                lector.setApellidoLector(rs.getString("apellido_lector"));
+                lector.setDniLector(rs.getInt("dni_lector"));
+                lector.setDireLector(rs.getString("dire_lector"));
+                lector.setEstado_lector(rs.getBoolean("estado_lector"));
+                
+                prestamo.setLector(lector);
+                prestamo.setEjemplar(ejemplar);
+                prestamo.setIdPrestamo((rs.getInt("id_prestamo")));
+                prestamo.setEstado(rs.getBoolean("estado"));
+                prestamo.setFecha_prestamo(rs.getDate("fecha_prestamo").toLocalDate());
                 
                 pres.add(prestamo);               
             }

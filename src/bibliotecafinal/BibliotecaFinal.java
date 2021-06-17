@@ -47,6 +47,7 @@ public class BibliotecaFinal {
         //ed.actualizarEstado(ejemplar, "Disponible");
         //System.out.println(ed.ejemplarDisponible(13));
         
+        
         Lector lector = new Lector (7);
         //Lector lector = new Lector (41123456,"Nani","Chan","Modulo 12",true);
         //led.agregarLector(lector);
