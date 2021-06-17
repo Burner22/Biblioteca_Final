@@ -80,10 +80,21 @@
             <Property name="text" type="java.lang.String" value="Ejemplares"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem4">
+            <MenuItem class="javax.swing.JMenuItem" name="jmiAltaEjemplares">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Alta de ejemplares"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmiAltaEjemplaresActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jmiBusquedaEjemplares">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Busqueda y actualizacion"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmiBusquedaEjemplaresActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
@@ -92,10 +103,21 @@
             <Property name="text" type="java.lang.String" value="Lectores"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem5">
+            <MenuItem class="javax.swing.JMenuItem" name="jmiCargaLectores">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Carga de lectores"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmiCargaLectoresActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jmiBusquedaLectores">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Busqueda y actualizacion"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmiBusquedaLectoresActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
