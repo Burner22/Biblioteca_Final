@@ -2,6 +2,7 @@
 package modelo;
 
 import entidades.Ejemplar;
+import entidades.Libro;
 import entidades.Multa;
 import entidades.Prestamo;
 import java.sql.Connection;
@@ -152,4 +153,29 @@ public class EjemplarData {
         }
         return aux;
     }  //Devuelvo un string con el estado del ejemplar
+    
+    public Ejemplar buscarEjemplar(int id_ejemplar){
+        Ejemplar ejemplar = null;
+        String sql = "SELECT * FROM ejemplar WHERE id_ejemplar = ?";
+        
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id_ejemplar);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()){
+                Conexion conex = new Conexion();
+                LibroData ld = new LibroData(conex);
+                ejemplar = new Ejemplar();
+                ejemplar.setId_ejemplar(rs.getInt(1));
+                Libro libro = ld.buscarLibroUnico(rs.getInt(2));
+                ejemplar.setLibro(libro);
+                ejemplar.setEstado(rs.getString(3));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error en buscar ejemplar unico!" + ex.getMessage());
+        }
+        return ejemplar;
+    }
 }
