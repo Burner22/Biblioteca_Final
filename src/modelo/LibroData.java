@@ -153,4 +153,32 @@ public class LibroData {
         
         return lista;
     }//funciona
+    
+    public Libro buscarLibroUnico(int id_libro){
+        Libro libro = null;
+        String sql = "SELECT * FROM libro WHERE id_libro = ?";
+        
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id_libro);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()){
+                Conexion conex = new Conexion();
+                AutorData ad = new AutorData(conex);
+                libro = new Libro();
+                libro.setId_libro(rs.getInt(1));
+                libro.setAutor(ad.buscarAutorUnico(rs.getInt(2)));
+                libro.setISBN(rs.getInt(3));
+                libro.setNombre(rs.getString(4));
+                libro.setEditorial(rs.getString(5));
+                libro.setAño(rs.getInt(6));
+                libro.setTipo(rs.getString(7));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error en buscarLibroUnico!" + ex.getMessage());
+        }
+        return libro;
+    }
 }
